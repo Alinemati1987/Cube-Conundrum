@@ -3,16 +3,40 @@ const fs = require("fs");
 // Main //
 function main() {
   const data = getData();
-  partOne(data);
+  let gameData = getGameData(data);
+  partOne(gameData);
+  partTwo(gameData);
 }
 
 // Functions //
 
 function partOne(inputData) {
-  let sums = 0;
-  let gameData = getGameData(inputData);
-  let totalSum = process(gameData);
+  let totalSum = process(inputData);
   consoleResults("Part ONE", totalSum);
+}
+
+function partTwo(allData) {
+  let totalSum_two = processPartTwo(allData);
+  consoleResults("Part TWO", totalSum_two);
+}
+
+function processPartTwo(theData) {
+  let secondSum = 0;
+
+  Object.keys(theData).forEach((thisKey) => {
+    let multiplied = 0;
+    let min = { blue: 0, red: 0, green: 0 };
+    let theDetail = theData[thisKey];
+
+    theDetail.forEach((detail) => {
+      if (detail.blue > min.blue) min.blue = detail.blue;
+      if (detail.green > min.green) min.green = detail.green;
+      if (detail.red > min.red) min.red = detail.red;
+    });
+    multiplied = min.blue * min.green * min.red;
+    secondSum += multiplied;
+  });
+  return secondSum;
 }
 
 function process(gData) {
@@ -29,7 +53,6 @@ function process(gData) {
       sum += parseInt(key);
     }
   });
-
   return sum;
 }
 
